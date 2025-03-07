@@ -4,7 +4,7 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from . import models
 from .database import engine
 
-from .routers import users, songs, gradients, effects, ledfx, state, dancefloor, html
+from .routers import effects, state, html
 
 from os import path
 import pathlib
@@ -27,11 +27,7 @@ if path.exists(assets_path + "/swagger-ui.css") and path.exists(assets_path + "/
     applications.get_swagger_ui_html = swagger_monkey_patch
 
 
-app.include_router(users.router)
-app.include_router(songs.router)
-app.include_router(gradients.router)
 app.include_router(effects.router)
-app.include_router(ledfx.router)
 app.include_router(state.router)
-app.include_router(dancefloor.router)
 app.include_router(html.router)
+

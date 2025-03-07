@@ -23,7 +23,7 @@ def read_effects(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
 def read_effect(effect_id: int, db: Session = Depends(get_db)):
     db_effect = effects.get_effect_by_id(db, effect_id=effect_id)
     if db_effect is None:
-        raise HTTPException(status_code=404, detail="User Not Found!")
+        raise HTTPException(status_code=404, detail="Effect Not Found!")
     return db_effect
 
 @router.get("/types/")

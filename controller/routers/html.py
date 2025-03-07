@@ -21,7 +21,7 @@ async def home(request: Request):
 @router.get('/change_colour', response_class=HTMLResponse)
 async def change_colour(request: Request, db: Session = Depends(get_db)):
     current_state = state.get_state(db)
-    api_response = api_calls.new_random_colour(db, current_state.current_song_id)
+    api_response = api_calls.new_random_colour(db)
     colour = api_response['config']['gradient']
     current_state = state.get_state(db)
     return templates.TemplateResponse("updated.html", {"request": request, "type": "Colour", 'data': colour})
@@ -29,7 +29,7 @@ async def change_colour(request: Request, db: Session = Depends(get_db)):
 @router.get('/change_effect', response_class=HTMLResponse)
 async def change_effect(request: Request, db: Session = Depends(get_db)):
     current_state = state.get_state(db)
-    api_response = api_calls.new_random_effect(db, current_state.current_song_id)
+    api_response = api_calls.new_random_effect(db)
     data = api_response['name']
     current_state = state.get_state(db) 
     return templates.TemplateResponse("updated.html", {"request": request, "type": "Effect", 'data': data})
