@@ -23,6 +23,6 @@ def change_effect(db: Session = Depends(get_db)):
 @router.get("/change_colour")
 def change_colour(db: Session = Depends(get_db)):
     current_state = state.get_state(db)
-    api_calls.new_random_colourscheme(db)
+    api_calls.new_random_colour(db)
     current_state = state.get_state(db)
     return current_state

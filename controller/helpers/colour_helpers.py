@@ -36,11 +36,6 @@ def generate_random_hex_colour() -> str:
     return colour
 
 
-def choose_random_colour(colour_list):
-    # returns a single colour from a list, as a list with a single member
-    return [choice(colour_list)]
-
-
 def convert_int_to_hex(colour_tuple) -> str:
     return "#{:02x}{:02x}{:02x}".format(
         colour_tuple[0], colour_tuple[1], colour_tuple[2]
@@ -121,38 +116,24 @@ def create_gradient(colour_list, limit=6, flash=False):
     return stem
 
 
-def refine_colourscheme(db, colour_list: list, colour_mode: str, mode: str) -> list:
-    output_to_console(
-        "print", f"[bright_red]refine_colourscheme called! {mode=} [/]", console
-    )
+def refine_colourscheme(db, colour_list: list, colour_mode: str) -> list:
     # Takes a list of colours and a mode from an effect
     # returns an appropriately-altered gradient
     output_to_console(
         "print", "[bright_cyan]colour_helpers[/].[bold]refine_colourscheme[/]", console
     )
-    output_to_console("print", f"{colour_list=}, {colour_mode=}, {mode=}", console)
+    output_to_console("print", f"{colour_list=}, {colour_mode=}", console)
     colour_list = list(set(colour_list))
     if colour_mode == "gradient":
-        # limit to current length in settings - same for both modes
         current_state = state.get_state(db)
         ledfx_max_colours = current_state.ledfx_max_colours
         unsorted_colourscheme = colour_list[:ledfx_max_colours]
         colourscheme = sort_colour_list(unsorted_colourscheme)
     elif colour_mode == "adjacent":
-        # song change - pick a voter (random), adjacent the colours
-        # dancefloor  - adjacent based on latest to dancefloor
-        if mode == "song":
-            colour = colour_list[0]
-        # make colourscheme of adjacents
+        colour = colour_list[0]
         colourscheme = adjacent_colours(colour)
-
     elif colour_mode == "single":
-        # song change - pick a voter (random) and they are the colour
-        # dancefloor  - new single colour is latest to dancefloor
-        # if mode == "song":
         colourscheme = [colour_list[0]]
-        # else:
-        #     colourscheme = dancefloor.get_last_n_dancers(db, True, 1)
 
     output_to_console("print", f"Returning {colourscheme=}", console)
     return colourscheme

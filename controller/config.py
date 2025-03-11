@@ -4,17 +4,14 @@
 API_BASE_URL = "http://192.168.1.238:8888"
 
 # Sets the API endpoints based on the above.  Dependent on your LedFX setup
-STICKS_API_ENDPOINT = f"{API_BASE_URL}/api/virtuals/virtual-1/effects"
+API_ENDPOINT = f"{API_BASE_URL}/api/virtuals/virtual-1/effects"
 
-# Sets the API endpoint for the bands controller - a directly addressed WLED instance. 
-WLED_BANDS_API_ENDPOINT = "http://192.168.1.33/json"
-
-# Sets the base URL for wedding controller API - note port difference from base URL!
-WEDDING_BASE_URL = "http://127.0.0.1:8000"
+# Sets the base URL for Controller API - note port difference from base URL!
+FX_CTRL_BASE_URL = "http://127.0.0.1:8000"
 
 # API URLs for timed_calls.py:
-EFFECT_URL = f"{WEDDING_BASE_URL}/state/change_effect"
-COLOUR_URL = f"{WEDDING_BASE_URL}/state/change_colour"
+EFFECT_URL = f"{FX_CTRL_BASE_URL}/state/change_effect"
+COLOUR_URL = f"{FX_CTRL_BASE_URL}/state/change_colour"
 VIRTUAL_URL = f"{API_BASE_URL}/api/virtuals/virtual-1/effects"
 
 # Sets the mode - running or otherwise.  "run" - Normal or "test" for text output of API call without making it.
