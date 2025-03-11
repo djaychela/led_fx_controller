@@ -6,7 +6,7 @@ from rich.console import Console
 
 from random import choice, shuffle, uniform
 
-from ..crud import dancefloor, state, songs
+from ..crud import state
 
 from ..config import *
 
@@ -20,10 +20,21 @@ else:
 
 def generate_random_hex_colour() -> str:
     # returns a 6-digit hex colour in the format #AABBCC
-    candidates = ["#ff0000", "#00ff00", "#0000ff", "#fa9d00", "#ffff00", "#9370db", "#808080", "#00ffff", "#ff00ff"]	
+    candidates = [
+        "#ff0000",
+        "#00ff00",
+        "#0000ff",
+        "#fa9d00",
+        "#ffff00",
+        "#9370db",
+        "#808080",
+        "#00ffff",
+        "#ff00ff",
+    ]
     colour = choice(candidates)
     output_to_console("print", f"Random Colour: {colour}", console)
     return colour
+
 
 def choose_random_colour(colour_list):
     # returns a single colour from a list, as a list with a single member
@@ -58,10 +69,10 @@ def adjacent_colours(rgb_colour, d=30 / 360):  # Assumption: r, g, b in [0, 255]
     hex_list.insert(1, rgb_colour)
     return hex_list
 
-def sort_colour_list(colour_list):
-    def lum (r,g,b):
-        return math.sqrt( .241 * r + .691 * g + .068 * b )
 
+def sort_colour_list(colour_list):
+    def lum(r, g, b):
+        return math.sqrt(0.241 * r + 0.691 * g + 0.068 * b)
 
     if colour_list is None:
         return []
@@ -70,12 +81,13 @@ def sort_colour_list(colour_list):
     if len(colour_list) == 1:
         return colour_list
     """Takes a list of hex-format colours and sorts them in brightness order"""
-    
+
     colour_list_nums = [convert_to_rgb_int(colour) for colour in colour_list]
     colour_list_nums.sort(key=lambda rgb: lum(*rgb), reverse=False)
     colour_list_hex = [convert_int_to_hex(colour) for colour in colour_list_nums]
 
     return colour_list_hex
+
 
 def create_gradient(colour_list, limit=6, flash=False):
     """takes a list of hex-format colours, and outputs
@@ -90,7 +102,7 @@ def create_gradient(colour_list, limit=6, flash=False):
         colour_list = [generate_random_hex_colour()]
     if len(colour_list) == 1:
         # if a single colour, 50% chance of solid colour
-        if uniform(0,1) > 0.5:
+        if uniform(0, 1) > 0.5:
             return colour_list[0]
     # modify list for flashing
     if flash:
@@ -108,34 +120,16 @@ def create_gradient(colour_list, limit=6, flash=False):
     stem += ")"
     return stem
 
-def create_colourscheme(db) -> list:
-    """ Gets the current relevant colours - 
-    song voters (first, but randomised in order)
-    dancefloor members (in reverse order, newest first)
-    returns a list of #AABBCC format colours """
-    output_to_console("print", "[bright_cyan]colour_helpers[/].[bold]create_colourscheme[/]", console)
-    current_state = state.get_state(db)
-    voter_colours = songs.get_song_colours(db, current_state.current_song_id, mode="list")
-    if voter_colours == None:
-        voter_colours = []
-    shuffle(voter_colours)
-    output_to_console("print", f"{voter_colours=}", console)
-    dancefloor_colours = dancefloor.get_dancefloor_colours(db, list_mode=True)
-    # remove any duplication
-    dancefloor_colours = [colour for colour in dancefloor_colours if colour not in voter_colours]
-    current_colours = voter_colours + dancefloor_colours
-    if len(current_colours) == 0:
-        # No votes, no-one on the dancefloor, so return a single random colour
-        current_colours = [generate_random_hex_colour()]
-    state.update_state_colours(db, current_colours)
-    output_to_console("print", f"{current_colours=}", console)
-    return current_colours
-
 
 def refine_colourscheme(db, colour_list: list, colour_mode: str, mode: str) -> list:
+    output_to_console(
+        "print", f"[bright_red]refine_colourscheme called! {mode=} [/]", console
+    )
     # Takes a list of colours and a mode from an effect
     # returns an appropriately-altered gradient
-    output_to_console("print", "[bright_cyan]colour_helpers[/].[bold]refine_colourscheme[/]", console)
+    output_to_console(
+        "print", "[bright_cyan]colour_helpers[/].[bold]refine_colourscheme[/]", console
+    )
     output_to_console("print", f"{colour_list=}, {colour_mode=}, {mode=}", console)
     colour_list = list(set(colour_list))
     if colour_mode == "gradient":
@@ -149,27 +143,26 @@ def refine_colourscheme(db, colour_list: list, colour_mode: str, mode: str) -> l
         # dancefloor  - adjacent based on latest to dancefloor
         if mode == "song":
             colour = colour_list[0]
-        else:
-            colour = dancefloor.get_last_n_dancers(db, True, 1)[0]
         # make colourscheme of adjacents
         colourscheme = adjacent_colours(colour)
-        
+
     elif colour_mode == "single":
         # song change - pick a voter (random) and they are the colour
         # dancefloor  - new single colour is latest to dancefloor
-        if mode == "song":
-            colourscheme = [colour_list[0]]
-        else:
-            colourscheme = dancefloor.get_last_n_dancers(db, True, 1)
-        
+        # if mode == "song":
+        colourscheme = [colour_list[0]]
+        # else:
+        #     colourscheme = dancefloor.get_last_n_dancers(db, True, 1)
+
     output_to_console("print", f"Returning {colourscheme=}", console)
     return colourscheme
-            
+
+
 def extract_gradient(gradient_string):
     """Takes a gradient string in rgb or hex value.
     Returns a list of hex values of colours."""
     rgb_matches = re.findall(r"(\d+),\s*(\d+),\s*(\d+)", gradient_string)
-    hex_matches = [ convert_int_to_hex([int(x) for x in rgb]) for rgb in rgb_matches]
+    hex_matches = [convert_int_to_hex([int(x) for x in rgb]) for rgb in rgb_matches]
     hex_finds = re.findall(r"#[A-Fa-f0-9]+", gradient_string)
     if hex_finds:
         hex_matches += hex_finds
