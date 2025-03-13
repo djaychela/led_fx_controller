@@ -40,3 +40,13 @@ async def change_effect(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         "updated.html", {"request": request, "type": "Effect", "data": data}
     )
+
+@router.get("/random_preset", response_class=HTMLResponse)
+async def random_preset(request: Request, db: Session = Depends(get_db)):
+    # current_state = state.get_state(db)
+    api_response = api_calls.select_random_effect_preset(db)
+    data = api_response
+    # current_state = state.get_state(db)
+    return templates.TemplateResponse(
+        "updated.html", {"request": request, "type": "Random Preset", "data": data}
+    )

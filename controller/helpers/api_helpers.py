@@ -85,3 +85,11 @@ def perform_api_call(db, data):
         else:
             output_to_console("rule", f"[bold green]:no_entry_sign::thumbs_down: {r.status_code} :thumbs_down::no_entry_sign:[/]\n", console)
     
+def get_api_response(endpoint):
+    r = requests.get(url=endpoint)
+    if r.status_code == 200:
+        output_to_console("rule", f"[bold green]:thumbs_up: 200 :thumbs_up:[/]\n", console)
+        return r.json()
+    else:
+        output_to_console("rule", f"[bold green]:no_entry_sign::thumbs_down: {r.status_code} :thumbs_down::no_entry_sign:[/]\n", console)
+        return None

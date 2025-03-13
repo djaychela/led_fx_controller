@@ -10,6 +10,14 @@ from .. import models, schemas
 def get_state(db: Session):
     return db.query(models.State).filter(models.State.id == 1).first()
 
+def create_ledfx_state_preset(ledfx_state):
+    """ Takes a dictionary of ledfx state, and returns an EffectsPreset of that data"""
+    led_fx_state_preset = models.EffectPreset()
+    led_fx_state_preset.name = ledfx_state['effect']['name']
+    led_fx_state_preset.type = ledfx_state['effect']['type']
+    led_fx_state_preset.config = ledfx_state["effect"]
+    return led_fx_state_preset
+
 def update_state_ledfx(db: Session, effect: schemas.EffectPreset):
     """ Takes a db session and an Effect and updates the current ledfx state to reflect the present Effect"""
     current_state = get_state(db)
@@ -31,3 +39,6 @@ def update_effect_id(db: Session, effect_id: int):
     db.commit()
     return current_state
 
+def return_effect_preset_json(db: Session, effect: schemas.EffectPreset):
+    """ Takes an EffectPreset and returns the json call for it"""
+    return effect.config["effect"]

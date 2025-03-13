@@ -16,6 +16,29 @@ else:
     console = None
 
 
+def get_current_ledfx_state(db):
+    current_ledfx_state = api_helpers.get_api_response(API_ENDPOINT)
+    return current_ledfx_state
+
+
+def select_random_effect_preset(db):
+    output_to_console(
+        "rule", f"[bold green]:light_bulb: New Random Preset :light_bulb:[/]\n", console
+    )
+    random_effect_preset = effects.get_random_effect_preset(db)
+    state.update_effect_id(db, random_effect_preset.id)
+    state.update_state_ledfx(db, random_effect_preset)
+
+    output_to_console(
+        "print", f"Effect Preset Chosen: {random_effect_preset.type}", console
+    )
+
+    effect_preset_json = state.return_effect_preset_json(db, random_effect_preset)
+    api_helpers.perform_api_call(db, effect_preset_json)
+
+    return effect_preset_json
+
+
 def new_random_effect(db):
     output_to_console(
         "rule", f"[bold green]:light_bulb: New Random Effect :light_bulb:[/]\n", console
@@ -27,13 +50,13 @@ def new_random_effect(db):
 
     colourscheme = new_random_colourscheme(db)
 
-    output_to_console(
-        "rule", f"[bright_red]:light_bulb: {colourscheme=}[/]\n", console
-    )
+    output_to_console("rule", f"[bright_red]:light_bulb: {colourscheme=}[/]\n", console)
 
     api_request_1 = api_helpers.create_api_request_string(
         db, random_effect.type, colourscheme, random_effect.id
     )
+
+    print(f"{api_request_1=}")
     api_helpers.perform_api_call(db, api_request_1)
 
     return api_request_1
@@ -44,6 +67,9 @@ def new_random_colour(db):
         "rule", f"[bold green]:light_bulb: New Random Colour :light_bulb:[/]\n", console
     )
     current_state = state.get_state(db)
+    led_fx_state = get_current_ledfx_state(db)
+    led_fx_state_preset = state.create_ledfx_state_preset(led_fx_state)
+    state.update_state_ledfx(db, led_fx_state_preset)
     colour_mode = current_state.ledfx_colour_mode
     max_colours = current_state.ledfx_max_colours
     colours = [colour_helpers.generate_random_hex_colour() for _ in range(max_colours)]
@@ -59,7 +85,9 @@ def new_random_colour(db):
 
 def new_random_colourscheme(db):
     output_to_console(
-        "rule", f"[bold green]:light_bulb: New Random Colour :light_bulb:[/]\n", console
+        "rule",
+        f"[bold green]:light_bulb: New Random Colourscheme :light_bulb:[/]\n",
+        console,
     )
     current_state = state.get_state(db)
     colour_mode = current_state.ledfx_colour_mode
