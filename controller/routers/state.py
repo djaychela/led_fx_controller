@@ -42,7 +42,7 @@ def change_colour(db: Session = Depends(get_db)):
 
 @router.get("/get_ledfx_state")
 def get_ledfx_state(db: Session = Depends(get_db)):
-    led_fx_state = api_calls.get_current_ledfx_state(db)
+    led_fx_state = api_calls.get_current_ledfx_state()
     led_fx_state_preset = state.create_ledfx_state_preset(led_fx_state)
     state.update_state_ledfx(db, led_fx_state_preset)
     return led_fx_state

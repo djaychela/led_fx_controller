@@ -93,3 +93,4 @@ def get_api_response(endpoint):
     else:
         output_to_console("rule", f"[bold green]:no_entry_sign::thumbs_down: {r.status_code} :thumbs_down::no_entry_sign:[/]\n", console)
         return None
+    

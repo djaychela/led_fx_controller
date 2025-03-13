@@ -39,6 +39,6 @@ def update_effect_id(db: Session, effect_id: int):
     db.commit()
     return current_state
 
-def return_effect_preset_json(db: Session, effect: schemas.EffectPreset):
-    """ Takes an EffectPreset and returns the json call for it"""
-    return effect.config["effect"]
+# def return_effect_preset_json(db: Session, effect: schemas.EffectPreset):
+#     """ Takes an EffectPreset and returns the json call for it"""
+#     return effect.config["effect"]

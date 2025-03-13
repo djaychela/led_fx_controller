@@ -175,3 +175,5 @@ cython_debug/
 
 # macOS annoyances
 .DS_Store
+
+notes.txt

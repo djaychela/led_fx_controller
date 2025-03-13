@@ -4,7 +4,7 @@ from rich.console import Console
 
 from .crud import state, effects
 
-from .helpers import colour_helpers, api_helpers
+from .helpers import colour_helpers, api_helpers, crud_helpers
 
 from .config import *
 
@@ -16,7 +16,7 @@ else:
     console = None
 
 
-def get_current_ledfx_state(db):
+def get_current_ledfx_state():
     current_ledfx_state = api_helpers.get_api_response(API_ENDPOINT)
     return current_ledfx_state
 
@@ -33,7 +33,7 @@ def select_random_effect_preset(db):
         "print", f"Effect Preset Chosen: {random_effect_preset.type}", console
     )
 
-    effect_preset_json = state.return_effect_preset_json(db, random_effect_preset)
+    effect_preset_json = crud_helpers.return_effect_preset_json(random_effect_preset)
     api_helpers.perform_api_call(db, effect_preset_json)
 
     return effect_preset_json
@@ -67,12 +67,32 @@ def new_random_colour(db):
         "rule", f"[bold green]:light_bulb: New Random Colour :light_bulb:[/]\n", console
     )
     current_state = state.get_state(db)
-    led_fx_state = get_current_ledfx_state(db)
+    led_fx_state = get_current_ledfx_state()
     led_fx_state_preset = state.create_ledfx_state_preset(led_fx_state)
     state.update_state_ledfx(db, led_fx_state_preset)
     colour_mode = current_state.ledfx_colour_mode
     max_colours = current_state.ledfx_max_colours
     colours = [colour_helpers.generate_random_hex_colour() for _ in range(max_colours)]
+    colourscheme = colour_helpers.refine_colourscheme(db, colours, colour_mode)
+    state.update_state_colours(db, colourscheme)
+
+    api_request_1 = api_helpers.create_api_request_string(
+        db, current_state.ledfx_type, colourscheme
+    )
+    api_helpers.perform_api_call(db, api_request_1)
+    return api_request_1
+
+def new_random_single_colour(db):
+    output_to_console(
+        "rule", f"[bold green]:light_bulb: New Random Single Colour :light_bulb:[/]\n", console
+    )
+    current_state = state.get_state(db)
+    led_fx_state = get_current_ledfx_state()
+    led_fx_state_preset = state.create_ledfx_state_preset(led_fx_state)
+    state.update_state_ledfx(db, led_fx_state_preset)
+    colour_mode = current_state.ledfx_colour_mode
+    colours = [colour_helpers.generate_random_hex_colour()]
+    print(f"{colours=}")
     colourscheme = colour_helpers.refine_colourscheme(db, colours, colour_mode)
     state.update_state_colours(db, colourscheme)
 
