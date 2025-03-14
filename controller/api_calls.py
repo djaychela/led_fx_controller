@@ -52,42 +52,49 @@ def new_random_effect(db):
 
     output_to_console("rule", f"[bright_red]:light_bulb: {colourscheme=}[/]\n", console)
 
-    api_request_1 = api_helpers.create_api_request_string(
-        db, random_effect.type, colourscheme, random_effect.id
+    api_request_1 = api_helpers.create_api_effect_request_string(
+        db, random_effect.id, colourscheme
     )
 
-    print(f"{api_request_1=}")
     api_helpers.perform_api_call(db, api_request_1)
 
     return api_request_1
 
 
-def new_random_colour(db):
+def new_random_colour_gradient(db, max_colours=6):
     output_to_console(
         "rule", f"[bold green]:light_bulb: New Random Colour :light_bulb:[/]\n", console
     )
     current_state = state.get_state(db)
     led_fx_state = get_current_ledfx_state()
+    if led_fx_state == {}:
+        return led_fx_state
     led_fx_state_preset = state.create_ledfx_state_preset(led_fx_state)
     state.update_state_ledfx(db, led_fx_state_preset)
     colour_mode = current_state.ledfx_colour_mode
-    max_colours = current_state.ledfx_max_colours
+    # max_colours = current_state.ledfx_max_colours
     colours = [colour_helpers.generate_random_hex_colour() for _ in range(max_colours)]
     colourscheme = colour_helpers.refine_colourscheme(db, colours, colour_mode)
     state.update_state_colours(db, colourscheme)
+    gradient = colour_helpers.create_gradient(colourscheme, mode="single")
 
     api_request_1 = api_helpers.create_api_request_string(
-        db, current_state.ledfx_type, colourscheme
+        db, current_state.ledfx_type, gradient
     )
     api_helpers.perform_api_call(db, api_request_1)
     return api_request_1
 
-def new_random_single_colour(db):
+
+def new_random_single_colour(db, mode="single"):
     output_to_console(
-        "rule", f"[bold green]:light_bulb: New Random Single Colour :light_bulb:[/]\n", console
+        "rule",
+        f"[bold green]:light_bulb: New Random Single Colour :light_bulb:[/]\n",
+        console,
     )
     current_state = state.get_state(db)
     led_fx_state = get_current_ledfx_state()
+    if led_fx_state == {}:
+        return led_fx_state
     led_fx_state_preset = state.create_ledfx_state_preset(led_fx_state)
     state.update_state_ledfx(db, led_fx_state_preset)
     colour_mode = current_state.ledfx_colour_mode
@@ -95,9 +102,10 @@ def new_random_single_colour(db):
     print(f"{colours=}")
     colourscheme = colour_helpers.refine_colourscheme(db, colours, colour_mode)
     state.update_state_colours(db, colourscheme)
+    gradient = colour_helpers.create_gradient(colourscheme, mode=mode)
 
     api_request_1 = api_helpers.create_api_request_string(
-        db, current_state.ledfx_type, colourscheme
+        db, current_state.ledfx_type, gradient
     )
     api_helpers.perform_api_call(db, api_request_1)
     return api_request_1
@@ -114,6 +122,5 @@ def new_random_colourscheme(db):
     max_colours = randint(1, current_state.ledfx_max_colours)
     colours = [colour_helpers.generate_random_hex_colour() for _ in range(max_colours)]
     colourscheme = colour_helpers.refine_colourscheme(db, colours, colour_mode)
-    # state.update_state_colours(db, colourscheme)
 
     return colourscheme

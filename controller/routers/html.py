@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
+from json import dumps
 from pathlib import Path
 
 from ..crud import state
@@ -16,38 +17,43 @@ templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 
 @router.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
-
-
-@router.get("/change_colour", response_class=HTMLResponse)
-async def change_colour(request: Request, db: Session = Depends(get_db)):
+async def home(request: Request, db: Session = Depends(get_db)):
     current_state = state.get_state(db)
-    api_response = api_calls.new_random_colour(db)
+    led_fx_config = current_state.ledfx_config
+    led_fx_json = dumps(led_fx_config)
+    # convert to json
+    # get current values, pass to page?
+    return templates.TemplateResponse("home.html", {"request": request, "current_state": led_fx_json})
+
+
+@router.get("/multi_gradient", response_class=HTMLResponse)
+async def change_colour(request: Request, db: Session = Depends(get_db), colours:int=6):
+    api_response = api_calls.new_random_colour_gradient(db, colours)
     colour = api_response["config"]["gradient"]
-    current_state = state.get_state(db)
     return templates.TemplateResponse(
         "updated.html", {"request": request, "type": "Colour", "data": colour}
     )
 
 @router.get("/single_colour", response_class=HTMLResponse)
 async def change_colour(request: Request, db: Session = Depends(get_db)):
-    current_state = state.get_state(db)
     api_response = api_calls.new_random_single_colour(db)
     colour = api_response["config"]["gradient"]
-    current_state = state.get_state(db)
     return templates.TemplateResponse(
-        "updated.html", {"request": request, "type": "Colour", "data": colour}
+        "updated.html", {"request": request, "type": "1 Colour", "data": colour}
     )
 
-
+@router.get("/single_gradient", response_class=HTMLResponse)
+async def change_colour(request: Request, db: Session = Depends(get_db)):
+    api_response = api_calls.new_random_single_colour(db, mode="gradient")
+    colour = api_response["config"]["gradient"]
+    return templates.TemplateResponse(
+        "updated.html", {"request": request, "type": "1 Gradient", "data": colour}
+    )
 
 @router.get("/change_effect", response_class=HTMLResponse)
 async def change_effect(request: Request, db: Session = Depends(get_db)):
-    current_state = state.get_state(db)
     api_response = api_calls.new_random_effect(db)
     data = api_response["name"]
-    current_state = state.get_state(db)
     return templates.TemplateResponse(
         "updated.html", {"request": request, "type": "Effect", "data": data}
     )

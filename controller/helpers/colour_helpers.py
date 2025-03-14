@@ -2,11 +2,15 @@ import colorsys
 import math
 import re
 
+from copy import deepcopy
+
 from rich.console import Console
 
 from random import choice, shuffle, uniform
 
-from ..crud import state
+from . import colour_helpers
+
+from ..crud import state, effects
 
 from ..config import *
 
@@ -84,7 +88,7 @@ def sort_colour_list(colour_list):
     return colour_list_hex
 
 
-def create_gradient(colour_list, limit=6, flash=False):
+def create_gradient(colour_list, mode, limit=6):
     """takes a list of hex-format colours, and outputs
     a linear gradient for ledfx based on the colour list.
     if there are more than limit entries, only a random selection
@@ -95,15 +99,9 @@ def create_gradient(colour_list, limit=6, flash=False):
         colour_list = colour_list[:limit]
     if len(colour_list) == 0:
         colour_list = [generate_random_hex_colour()]
-    if len(colour_list) == 1:
-        # if a single colour, 50% chance of solid colour
-        if uniform(0, 1) > 0.5:
+    if len(colour_list) == 1 and mode == "single":
+        # return a single colour (otherwise 1-colour gradient)
             return colour_list[0]
-    # modify list for flashing
-    if flash:
-        # insert #000000 at every other index
-        colours = [[colour, "#000000"] for colour in colour_list]
-        colour_list = [item for sublist in colours for item in sublist]
     increment = int(98 / len(colour_list))
     location = 0
     stem = "linear-gradient(90deg, rgb(0, 0, 0) 0%"
@@ -148,3 +146,4 @@ def extract_gradient(gradient_string):
     if hex_finds:
         hex_matches += hex_finds
     return hex_matches
+

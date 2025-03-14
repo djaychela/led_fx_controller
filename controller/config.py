@@ -14,6 +14,9 @@ EFFECT_URL = f"{FX_CTRL_BASE_URL}/state/change_effect"
 COLOUR_URL = f"{FX_CTRL_BASE_URL}/state/change_colour"
 VIRTUAL_URL = f"{API_BASE_URL}/api/virtuals/virtual-1/effects"
 
+# Sonos Speaker URL:
+SONOS_SPEAKER = "http://192.168.1.230"
+
 # Sets the mode - running or otherwise.  "run" - Normal or "test" for text output of API call without making it.
 MODE = "run"
 
