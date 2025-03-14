@@ -28,7 +28,6 @@ class EffectBase(BaseModel):
 
 
 class EffectPresetBase(BaseModel):
-    song_id: str
     name: str
     type: str
     config: Optional[dict]
@@ -38,7 +37,6 @@ class EffectPresetBase(BaseModel):
 
 
 class EffectPresetCreate(EffectPresetBase):
-    song_id: str
     name: str
     type: str
     config: Json

@@ -44,3 +44,5 @@ class State(Base):
     ledfx_colour_mode = Column(String, index=True)
     ledfx_max_colours = Column(Integer)
     effect_id = Column(Integer)
+    current_song_title = Column(String)
+    current_song_artist = Column(String)

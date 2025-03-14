@@ -21,8 +21,6 @@ async def home(request: Request, db: Session = Depends(get_db)):
     current_state = state.get_state(db)
     led_fx_config = current_state.ledfx_config
     led_fx_json = dumps(led_fx_config)
-    # convert to json
-    # get current values, pass to page?
     return templates.TemplateResponse("home.html", {"request": request, "current_state": led_fx_json})
 
 
@@ -65,3 +63,4 @@ async def random_preset(request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         "updated.html", {"request": request, "type": "Random Preset", "data": data}
     )
+

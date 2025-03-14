@@ -3,13 +3,23 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import get_swagger_ui_html
 from . import models
 from .database import engine
+from .dependencies import get_db
+
+from apscheduler.schedulers.background import BackgroundScheduler  # runs tasks in the background
+from apscheduler.triggers.cron import CronTrigger  # allows us to specify a recurring time for execution
 
 from .routers import effects, state, html
+from .crud import sonos
+from .config import SONOS_INTERVAL
 
 from os import path
 import pathlib
 
 models.Base.metadata.create_all(bind=engine)
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(sonos.get_sonos_state, "interval", seconds=SONOS_INTERVAL)
+scheduler.start()
 
 app = FastAPI()
 
