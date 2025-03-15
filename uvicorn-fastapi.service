@@ -1,0 +1,25 @@
+[Unit]
+Description=Uvicorn
+After=network.target
+
+[Service]
+Type=simple
+User=darren
+Group=darren
+DynamicUser=true
+WorkingDirectory=/home/darren/ledfx_ctrl/led_fx_controller
+PrivateTmp=true
+ExecStart=/home/darren/ledfx_ctrl/fastapi-env/bin/uvicorn \
+        --proxy-headers \
+        --forwarded-allow-ips='*' \
+        --workers=4 \
+        --host=0.0.0.0 \
+        --port=8000 \
+        --no-access-log \
+        controller.main:app
+ExecReload=/bin/kill -HUP ${MAINPID}
+RestartSec=1
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
