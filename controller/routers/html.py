@@ -132,18 +132,21 @@ async def settings(request: Request, db: Session = Depends(get_db)):
             "request": request,
             "sonos_active": current_state.sonos_active,
             "sonos_ip": SONOS_SPEAKER_ADDRESS,
+            "sonos_mode": current_state.sonos_mode,
         },
     )
 
 
 @router.post("/settings", response_class=HTMLResponse)
 async def store_settings(
-    request: Request, db: Session = Depends(get_db), sonos_active: str = Form("")
+    request: Request, db: Session = Depends(get_db), sonos_active: str = Form(""), sonos_mode: str = Form(...)
 ):
+    # print(f"{sonos_mode=}")
     if sonos_active == "true":
         sonos.store_sonos_state(db, True)
     else:
         sonos.store_sonos_state(db, False)
+    sonos.store_sonos_mode(db, sonos_new_mode=sonos_mode)
     current_state = get_state(db)
     return templates.TemplateResponse(
         "settings.html",
@@ -151,6 +154,7 @@ async def store_settings(
             "request": request,
             "sonos_active": current_state.sonos_active,
             "sonos_ip": SONOS_SPEAKER_ADDRESS,
+            "sonos_mode": sonos_mode,
         },
     )
 

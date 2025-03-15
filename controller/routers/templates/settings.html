@@ -11,25 +11,41 @@
 
    {% include 'navbar.html' %}
 
-   <div class="stack" style="text-align: center;">
+   <div class="container" style="text-align: center;">
       <h1>Settings</h1>
       <form method="post" action='/settings'>
-         <label>
-            {% if sonos_active %}
-            <input type="checkbox" id="sonos_active" name="sonos_active" value="true" checked/>
-            {% else %}
-            <input type="checkbox" id="sonos_active" name="sonos_active" value="true" />
-            {% endif %}
-            <span class="checkable">Sonos Active</span>
-         </label>
+         <div class="stack" style="text-align: center;">
+            <label>
+               {% if sonos_active %}
+               <input type="checkbox" id="sonos_active" name="sonos_active" value="true" checked />
+               {% else %}
+               <input type="checkbox" id="sonos_active" name="sonos_active" value="true" />
+               {% endif %}
+               <span class="checkable">Sonos Active</span>
+            </label>
+         </div>
+         <div class="stack" style="text-align: center;">
+            <label>
+               <p>Settings Mode:<p>
+               <select name="sonos_mode" style="max-width: 200px;">
+                  {% if sonos_mode == "preset" %}
+                  <option value="preset" selected>Preset</option>
+                  <option value="random">Random</option>
+                  {% else %}
+                  <option value="preset">Preset</option>
+                  <option value="random" selected>Random</option>
+                  {% endif %}
+                </select>
+            </label>
+         </div>
          <input class="submit" type="submit" value="Save Values">
       </form>
    </div>
 
    <div class="stack" style="text-align: center;">Sonos Active: {{ sonos_active }}</div>
    <div class="stack" style="text-align: center;">Sonos IP: {{ sonos_ip }}</div>
-   
-   
+
+
 
 </body>
 

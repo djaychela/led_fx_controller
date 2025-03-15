@@ -8,7 +8,7 @@ from .state import get_state, update_track_info
 
 from ..dependencies import get_db
 
-from ..api_calls import select_random_effect_preset
+from ..api_calls import select_random_effect_preset, new_random_effect
 
 
 def connect_to_sonos():
@@ -38,7 +38,10 @@ def get_sonos_state():
                 track_album=track_info["album"],
                 track_album_art=track_info["album_art"]
             )
-            select_random_effect_preset(db)
+            if current_state.sonos_mode == "preset":
+                select_random_effect_preset(db)
+            else:
+                new_random_effect(db)
             return track_info
         return None
     return None
@@ -47,4 +50,9 @@ def get_sonos_state():
 def store_sonos_state(db: Session, sonos_new_state: bool):
     current_state = get_state(db)
     current_state.sonos_active = sonos_new_state
+    db.commit()
+
+def store_sonos_mode(db: Session, sonos_new_mode: bool):
+    current_state = get_state(db)
+    current_state.sonos_mode = sonos_new_mode
     db.commit()

@@ -49,3 +49,4 @@ class State(Base):
     current_song_album = Column(String)
     current_song_album_art = Column(String)
     sonos_active = Column(Boolean)
+    sonos_mode = Column(String)
