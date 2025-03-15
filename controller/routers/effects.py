@@ -41,13 +41,13 @@ def store_effect_preset(request: Request, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[schemas.EffectPreset])
 def read_effects(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    effects_list = effects.get_effects(db, skip=skip, limit=limit)
+    effects_list = effects.get_effect_presets(db, skip=skip, limit=limit)
     return effects_list
 
 
 @router.get("/view/{effect_id}", response_model=schemas.EffectPreset)
 def read_effect(effect_id: int, db: Session = Depends(get_db)):
-    db_effect = effects.get_effect_by_id(db, effect_id=effect_id)
+    db_effect = effects.get_effect_preset_by_id(db, effect_id=effect_id)
     if db_effect is None:
         raise HTTPException(status_code=404, detail="Effect Not Found!")
     return db_effect

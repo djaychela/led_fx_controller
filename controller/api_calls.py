@@ -39,6 +39,24 @@ def select_random_effect_preset(db):
     return effect_preset_json
 
 
+def select_effect_preset(db, effect_id):
+    output_to_console(
+        "rule", f"[bold green]:light_bulb: New Effect Preset :light_bulb:[/]\n", console
+    )
+    effect_preset = effects.get_effect_preset_by_id(db, effect_id)
+    state.update_effect_id(db, effect_preset.id)
+    state.update_state_ledfx(db, effect_preset)
+
+    output_to_console(
+        "print", f"Effect Preset Chosen: {effect_preset.type}", console
+    )
+
+    effect_preset_json = crud_helpers.return_effect_preset_json(effect_preset)
+    api_helpers.perform_api_call(db, effect_preset_json)
+
+    return effect_preset_json
+
+
 def new_random_effect(db):
     output_to_console(
         "rule", f"[bold green]:light_bulb: New Random Effect :light_bulb:[/]\n", console

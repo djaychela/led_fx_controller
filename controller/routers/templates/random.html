@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+    <link type="text/css" rel="stylesheet" href="/assets/jsoneditor.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div style="text-align: center;">
+        <h1>Random Changes</h1>
+        <div>
+            <div><span>
+                    <table class="primary" style="margin: 0 auto;">
+                        <tr>
+                            <form method="get" id="myForm" action='multi_gradient/'>
+                                <td><input type="number" id="colours" name="colours" value="4" max="6" min="2"></td>
+                                <td><input class="submit" type="submit" value="Colour Gradient"></td>
+                            </form>
+                        </tr>
+                        <tr>
+                            <form method="get" id="myForm" action='single_colour/'>
+                                <td colspan="2" align="right"><input class="submit" type="submit" value="Single Colour">
+                                </td>
+                            </form>
+                        </tr>
+                        <tr>
+                            <form method="get" id="myForm" action='single_gradient/'>
+                                <td colspan="2" align="right"><input class="submit" type="submit"
+                                        value="Single Gradient"></td>
+                            </form>
+                        </tr>
+                        <tr>
+                            <form method="get" id="myForm" action='change_effect/'>
+                                <td colspan="2" align="right"><input class="submit" type="submit"
+                                        value="Effect & Colour"></td>
+                            </form>
+                        </tr>
+                        <tr>
+                            <form method="get" id="myForm" action='random_preset/'>
+                                <td colspan="2" align="right"><input class="submit" type="submit" value="Random Preset">
+                                </td>
+                            </form>
+                        </tr>
+
+                    </table>
+            </div>
+        </div>
+
+
+</body>
+
+</html>

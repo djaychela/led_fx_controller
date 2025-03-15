@@ -30,7 +30,7 @@ def check_effect_duplicate(db: Session, effect: schemas.EffectPreset):
 
 def store_effect_preset(db: Session, ledfx_current_config: schemas.EffectPresetCreate):
     db_effect = models.EffectPreset()
-    db_effect.config = ledfx_current_config["effect"]["config"]
+    db_effect.config = ledfx_current_config
     db_effect.name = ledfx_current_config["effect"]["name"]
     db_effect.type = ledfx_current_config["effect"]["type"]
     db_effect.max_colours = 6
@@ -45,7 +45,7 @@ def store_effect_preset(db: Session, ledfx_current_config: schemas.EffectPresetC
     return db_effect
 
 
-def get_effects(db: Session, skip: int = 0, limit: int = 100):
+def get_effect_presets(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.EffectPreset).offset(skip).limit(limit).all()
 
 
@@ -53,12 +53,19 @@ def get_effect_types(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Effect).offset(skip).limit(limit).all()
 
 
-def get_effect_by_id(db: Session, effect_id: int):
+def get_effect_preset_by_id(db: Session, effect_id: int):
     return (
         db.query(models.EffectPreset)
         .filter(models.EffectPreset.id == effect_id)
         .first()
     )
+
+def delete_effect_preset_by_id(db: Session, effect_id: int):
+    to_delete = db.query(models.EffectPreset).filter(models.EffectPreset.id == effect_id).delete()
+    if to_delete:
+        db.commit()
+        return True
+    return False
 
 
 def get_random_effect(db: Session, max_colours):

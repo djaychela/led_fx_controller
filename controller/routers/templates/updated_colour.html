@@ -9,14 +9,12 @@
    </head>
    <body>
 
-      {% include 'navbar.html' %}
-
+    {% include 'navbar.html' %}
+    
       <h1>{{type}} - Updated!</h1>
       
-      <div class="stack">{{data}}</div>
-      
-      <div style="background: {{ data_2 }}; min-width: 120px;">&nbsp;</div>
-      <!-- <div class="jsoneditor-field">{{data_2}}</div> -->
+        <div class="jsoneditor-field">{{data}}</div>
+        <div style="background: {{ data }}; min-width: 120px;">&nbsp;</div>
    </body>
 </html>
 

@@ -5,12 +5,15 @@
    <meta charset="utf-8">
    <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
    <link type="text/css" rel="stylesheet" href="/assets/jsoneditor.css">
-   <script src="/assets/jsoneditor.js"></script>
    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-   <h1>Change Something!</h1>
+
+   {% include 'navbar.html' %}
+   
+   <div>
+   <h1>Random Changes</h1>
    <div class="flex demo">
       <div style="width: 1%;"><span>
             <form method="get" id="myForm" action='multi_gradient/'>
@@ -30,7 +33,7 @@
          </span></div>
       <div><span>
             <form method="get" id="myForm" action='change_effect/'>
-               <input class="submit" type="submit" value="Effect">
+               <input class="submit" type="submit" value="Effect & Colour">
             </form>
          </span></div>
       <div><span>
@@ -44,31 +47,8 @@
             </form>
          </span></div>
    </div>
+</div>
 
-
-   <!-- <div id="jsoneditor" style="width: 800px; height: 400px;"></div>
-
-   <script>
-      fetch('http://127.0.0.1:8000/state/') // Replace with your FastAPI backend URL
-          .then(response => response.json())
-          .then(data => {
-              const container = document.getElementById('jsoneditor');
-              const editor = new JSONEditor(container, {
-                  mode: 'text',
-                  onEditable: false,
-                  schema: {
-                      type: 'object',
-                      properties: {
-                          // Define your schema here if needed.  This helps JSONEditor understand the structure.
-                      }
-                  }
-              });
-              editor.set(data);
-          })
-          .catch(error => {
-              console.error('Error fetching JSON data:', error);
-          });
-  </script> -->
 
 </body>
 

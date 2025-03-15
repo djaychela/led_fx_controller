@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON
+from sqlalchemy import Column, Integer, String, JSON, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .database import Base
@@ -46,3 +46,6 @@ class State(Base):
     effect_id = Column(Integer)
     current_song_title = Column(String)
     current_song_artist = Column(String)
+    current_song_album = Column(String)
+    current_song_album_art = Column(String)
+    sonos_active = Column(Boolean)

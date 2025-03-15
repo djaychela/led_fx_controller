@@ -66,6 +66,7 @@ class StateBase(BaseModel):
     ledfx_max_colours: int
     effect_id: int
     colours: Optional[str]
+    sonos_active: bool
 
     class Config:
         from_attributes = True

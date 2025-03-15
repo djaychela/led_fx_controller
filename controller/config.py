@@ -14,8 +14,8 @@ EFFECT_URL = f"{FX_CTRL_BASE_URL}/state/change_effect"
 COLOUR_URL = f"{FX_CTRL_BASE_URL}/state/change_colour"
 VIRTUAL_URL = f"{API_BASE_URL}/api/virtuals/virtual-1/effects"
 
-# Sonos Speaker URL:
-SONOS_SPEAKER = "192.168.1.230"
+# Sonos Speaker Address:
+SONOS_SPEAKER_ADDRESS = "192.168.1.230"
 
 # Sonos Polling Time Interval
 SONOS_INTERVAL = 10
@@ -25,9 +25,6 @@ MODE = "run"
 
 # Sets whether there will be output to the console:
 CONSOLE_OUTPUT = True
-
-# Sets the timeout in seconds for timed_calls.py
-TIMED_CALL_TIMEOUT = 120
 
 # Effect type to never choose - caused issues!
 NEVER_CHOOSE_EFFECTS_TYPE = ["gradient"]

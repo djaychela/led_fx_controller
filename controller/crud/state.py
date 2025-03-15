@@ -39,9 +39,11 @@ def update_effect_id(db: Session, effect_id: int):
     db.commit()
     return current_state
 
-def update_track_info(db: Session, track_artist, track_title):
+def update_track_info(db: Session, track_artist, track_title, track_album, track_album_art):
     current_state = get_state(db)
     current_state.current_song_artist = track_artist
     current_state.current_song_title = track_title
+    current_state.current_song_album = track_album
+    current_state.current_song_album_art = track_album_art
     db.commit()
     return current_state

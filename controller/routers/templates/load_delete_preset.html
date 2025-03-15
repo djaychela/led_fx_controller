@@ -2,21 +2,18 @@
 <html>
    <head>
       <meta charset="utf-8">
-      <meta http-equiv="refresh" content="3; url=/">
+      <meta http-equiv="refresh" content="3; url=/presets_list">
       <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
       <link type="text/css" rel="stylesheet" href="/assets/jsoneditor.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
    </head>
    <body>
 
-      {% include 'navbar.html' %}
-
-      <h1>{{type}} - Updated!</h1>
+    {% include 'navbar.html' %}
+    
+      <h1>{{ completed_action }} - Effect {{ effect_id }}</h1>
       
-      <div class="stack">{{data}}</div>
-      
-      <div style="background: {{ data_2 }}; min-width: 120px;">&nbsp;</div>
-      <!-- <div class="jsoneditor-field">{{data_2}}</div> -->
+      <div class="jsoneditor-field">{{data}}</div>
    </body>
 </html>
 

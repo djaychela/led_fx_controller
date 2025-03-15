@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <link type="text/css" rel="stylesheet" href="/assets/picnic.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+   {% include 'navbar.html' %}
+
+   <div class="stack" style="text-align: center;">
+      <h1>Settings</h1>
+      <form method="post" action='/settings'>
+         <label>
+            {% if sonos_active %}
+            <input type="checkbox" id="sonos_active" name="sonos_active" value="true" checked/>
+            {% else %}
+            <input type="checkbox" id="sonos_active" name="sonos_active" value="true" />
+            {% endif %}
+            <span class="checkable">Sonos Active</span>
+         </label>
+         <input class="submit" type="submit" value="Save Values">
+      </form>
+   </div>
+
+   <div class="stack" style="text-align: center;">Sonos Active: {{ sonos_active }}</div>
+   <div class="stack" style="text-align: center;">Sonos IP: {{ sonos_ip }}</div>
+   
+   
+
+</body>
+
+</html>
