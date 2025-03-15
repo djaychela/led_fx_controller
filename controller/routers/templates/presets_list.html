@@ -12,40 +12,39 @@
 
    {% include 'navbar.html' %}
 
-   <h1>Presets List</h1>
-   <form action="/load_delete_preset" method="post">
-      <table>
-         <tr>
-            <form method="get" id="myForm" action='effects/store_preset/'>
-               <td colspan="5" text-align="right"><button class="warning" type="submit">Store Preset From Current LedFX
-                     Settings</button></td>
-            </form>
-         </tr>
-         {% for preset in presets_list %}
-         <tr>
-            <td>
-               <button type="submit" name="action" value="load_{{ loop.index }}">Load {{ loop.index }}</button>
-            </td>
-            <td>
-               {{preset[0] }}
-            </td>
-            <td>
-               <div style="background: {{preset[2] }}; min-width: 120px;">&nbsp;</div>
-            </td>
-            <td>
-               <div class="jsoneditor-field">{{preset[1] }}</div>
-            </td>
-            <td>
-               <button type="submit" name="action" class="error" value="delete_{{ loop.index }}">Delete {{ loop.index
-                  }}</button>
-            </td>
-         </tr>
+   <div class="stack" style="text-align: center;">
+      <h1>Presets List</h1>
+      <form action="/load_delete_preset" method="post">
+         <table class="primary" style="margin: 0 auto;">
+            <tr>
+               <form method="get" id="myForm" action='effects/store_preset/'>
+                  <td colspan="4" text-align="right"><button class="warning" type="submit">Store Preset From Current
+                        LedFX
+                        Settings</button></td>
+               </form>
+            </tr>
+            {% for preset in presets_list %}
+            <tr>
+               <td>
+                  <button type="submit" name="action" value="load_{{ loop.index }}">Load {{ loop.index }}</button>
+               </td>
+               <td>
+                  {{preset[0] }}
+               </td>
+               <td>
+                  <div style="background: {{preset[2] }}; min-width: 120px;">&nbsp;</div>
+               </td>
+               <td>
+                  <button type="submit" name="action" class="error" value="delete_{{ loop.index }}">Delete {{ loop.index
+                     }}</button>
+               </td>
+            </tr>
 
-         {% endfor %}
+            {% endfor %}
 
-      </table>
-   </form>
-
+         </table>
+      </form>
+   </div>
 </body>
 
 </html>
