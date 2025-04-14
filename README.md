@@ -201,6 +201,8 @@ There's a fair bit of output to the console as the system runs.  This was for bu
 
 A Pi is the ideal computer to install this project and LedFX on as you can just site it near a speaker, attach a microphone and you're off to the races.  This is how I actually use it.  However, there may be some issues with audio setup, so here's how I did it with a microphone from the pi hut.  
 
+https://thepihut.com/products/mini-usb-microphone
+
 If you reboot after plugging the microphone in, you should be able to check for its presence with the following command:
 
 `dmesg | grep C-Media`
