@@ -196,6 +196,61 @@ There's a fair bit of output to the console as the system runs.  This was for bu
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- RASPBERRYPI -->
+## Installing a microphone for LedFX on a Rasperry Pi
+
+A Pi is the ideal computer to install this project and LedFX on as you can just site it near a speaker, attach a microphone and you're off to the races.  This is how I actually use it.  However, there may be some issues with audio setup, so here's how I did it with a microphone from the pi hut.  
+
+If you reboot after plugging the microphone in, you should be able to check for its presence with the following command:
+
+`dmesg | grep C-Media`
+
+with a response similar to this:
+
+`[    2.743996] usb 1-2: Manufacturer: C-Media Electronics Inc.`
+
+Typing
+
+`lsusb`
+
+Should reveal it's a PCM2902:
+
+`Bus 001 Device 002: ID 08bb:2902 Texas Instruments PCM2902 Audio Codec`
+
+You'll then need to update the firmware:
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+This will update the system packages, and should include a firmware update for the mic as well - you should see output relating to firmware updates.
+You'll then need to reboot:
+
+`sudo reboot`
+
+After the reboot, you'll want to see info about the audio cards present in the system:
+
+`cat /proc/asound/cards`
+
+On a Pi5, the USB card may appear as ID 2 (as the two HDMI outputs are 0 and 1):
+
+```
+ 0 [vc4hdmi0       ]: vc4-hdmi - vc4-hdmi-0
+                      vc4-hdmi-0
+ 1 [vc4hdmi1       ]: vc4-hdmi - vc4-hdmi-1
+                      vc4-hdmi-1
+ 2 [Device         ]: USB-Audio - USB PnP Sound Device
+                      C-Media Electronics Inc. USB PnP Sound Device at usb-xhci-hcd.0-2, full speed
+```
+
+The adafruit instructions for this refer to a headphone jack (and you'll need to follow them for a Pi <5) but the Pi5 doesn't have one, so shouldn't be a problem, and you won't need to blacklist the headphones.
+
+You can now do a test recording, using the ID given from the previous command (for my system, this is hw:2,0)
+
+`arecord --device=hw:2,0 --format S16_LE --rate 44100 -c1 test.wav -V mono`
+
+Speaking near the mic should show levels.  If so, you should be good to go when running LedFX.
 
 <!-- CONTRIBUTING -->
 ## Contributing
